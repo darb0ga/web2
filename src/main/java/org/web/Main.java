@@ -2,80 +2,93 @@ package org.web;
 
 import com.fastcgi.FCGIInterface;
 
+import java.time.LocalTime;
+import java.util.LinkedHashMap;
+import java.util.Properties;
+
 
 public class Main {
+    private static final String HTTP_RESPONSE = """
+            Content-Type: application/json
+                    
+            {"code":"%d","result":"%s","x":"%d","y":"%.3f","r":"%.1f","time":"%s","scriptTime":"%.3f"}
+            """;
+    private static final String HTTP_ERROR = """
+            Content-Type: application/json
+                    
+            {"code":"%d","result":"%s","time":"%s","scriptTime":"%.3f"}
+            """;
+
     public static void main(String[] args) {
-        var httpResponse = """
-                HTTP/1.1 200 OK
-                Content-Type: text/html
-                Content-Length: %d
-                %s
-                """;
 
+        FCGIInterface fcgi = new FCGIInterface();
 
-        var fcgiInterface = new FCGIInterface();
-        while (fcgiInterface.FCGIaccept() >= 0) {
-            var getParams = System.getProperties().getProperty("QUERY_STRING");
-            //var params = ???
-            long startTime = System.currentTimeMillis();
-            //change
-            int x = 1;
-            int y = 1;
-            int r = 1;
+        while (fcgi.FCGIaccept() >= 0) {
+            if (FCGIInterface.request.params.getProperty("REQUEST_METHOD").equals("GET")) {
+                long time = System.nanoTime();
+                Properties prop = System.getProperties();
+                String QUERY_STRING = prop.getProperty("QUERY_STRING");
+                if (!QUERY_STRING.isBlank()) {
 
-            var checking = checkDot(x, y, r);
-            long prossTime = System.currentTimeMillis() - startTime;
+                    try {
+                        LinkedHashMap<String, Float> params = parse(QUERY_STRING);
+                        boolean isValidated = !(params.isEmpty());
+                        boolean isHit = checkDot(params);
 
-
-
-
-            System.out.println(httpResponse);
+                        if (isValidated) {
+                            System.out.printf((HTTP_RESPONSE) + "%n", 200, isHit, params.get("x").intValue(), params.get("y"), params.get("r"),
+                                    String.valueOf(LocalTime.now()).split("\\.")[0],
+                                    (double) (System.nanoTime() - time) / 1000000); //
+                        } else {
+                            System.out.printf((HTTP_ERROR) + "%n", 400, "Invalid values", String.valueOf(LocalTime.now()).split("\\.")[0],
+                                    (double) (System.nanoTime() - time) / 1000000);
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.printf((HTTP_ERROR) + "%n", 400, "Invalid values", String.valueOf(LocalTime.now()).split("\\.")[0],
+                                (double) (System.nanoTime() - time) / 1000000);
+                    } catch (Exception e) {
+                        System.out.printf((HTTP_ERROR) + "%n", 400, e.getMessage(), String.valueOf(LocalTime.now()).split("\\.")[0],
+                                (double) (System.nanoTime() - time) / 1000000);
+                    }
+                } else {
+                    System.out.printf((HTTP_ERROR) + "%n", 400, "Fill values", String.valueOf(LocalTime.now()).split("\\.")[0],
+                            (double) (System.nanoTime() - time) / 10000000);
+                }
+            }
         }
     }
 
-    private static boolean checkDot(int x, int y, int r) {
+    public static LinkedHashMap<String, Float> parse(String queryString) throws IndexOutOfBoundsException {
+        LinkedHashMap<String, Float> parameters = new LinkedHashMap<>();
+        String[] reses = queryString.split("&");
+        float x = Float.parseFloat(reses[0].substring(2));
+        float y = Float.parseFloat(reses[1].substring(2));
+        float r = Float.parseFloat(reses[2].substring(2));
+        parameters.put("x", x);
+        parameters.put("y", y);
+        parameters.put("r", r);
+
+
+        return parameters;
+    }
+
+
+    private static boolean checkDot(LinkedHashMap<String, Float> params) {
+        float x = params.get("x");
+        float y = params.get("y");
+        float r = params.get("r");
+
         if (x > 0) {
             if (y <= 0) {
-                return x <= r & y >= -r / 2;
+                return (x <= r) && (y >= (-r / 2));
             } else {
                 return x * x + y * y <= r * r;
             }
         } else {
             if (y <= 0) {
-                return x - (r / 2) <= y;
+                return -x - (r / 2) <= y;
             }
             return false;
         }
     }
-
-        //отсылка ответа на страницу
-        //адо еще сделать так что бы при обновлении данные не пропадали
-
-        //и кнопки побольше
-        //ширину столбцов изменитьь
-
-
-
-    //public static void main(String[] args) {
-    //        var fcgi = new FCGIInterface();
-    //        while (fcgi.FCGIaccept() >= 0) {
-    //            try {
-    //                var queryParams = System.getProperties().getProperty("QUERY_STRING");
-    //                var params = new Params(queryParams);
-    //
-    //                var startTime = Instant.now();
-    //                var result = calculate(params.getX(), params.getY(), params.getR());
-    //                var endTime = Instant.now();
-    //
-    //                var json = String.format(RESULT_JSON, ChronoUnit.NANOS.between(startTime, endTime), LocalDateTime.now(), result);
-    //                var response = String.format(HTTP_RESPONSE, json.getBytes(StandardCharsets.UTF_8).length + 2, json);
-    //                System.out.println(response);
-    //            } catch (ValidationException e) {
-    //                var json = String.format(ERROR_JSON, LocalDateTime.now(), e.getMessage());
-    //                var response = String.format(HTTP_ERROR, json.getBytes(StandardCharsets.UTF_8).length + 2, json);
-    //                System.out.println(response);
-    //            }
-    //        }
-    //    }
-
 }
