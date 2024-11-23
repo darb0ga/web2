@@ -25,7 +25,6 @@
 <hr>
 <table>
     <td>
-
         <p>Выберите значение</p>
         <form method="post" action="/web2/controller-servlet" id="table">
             <table id="check">

@@ -1,7 +1,7 @@
 * {
     margin: 0;
     padding: 0;
-    background-image: url("images/wall.jpg");
+    background-image: url("images/photo.jpg");
     background-size: cover;
     background-attachment: fixed;
 }
@@ -10,7 +10,7 @@ header {
     text-align: center;
     font-family: fantasy;
     font-size: xx-large;
-    color: darkgreen;
+    color: #9a51ef;
 }
 
 table {
@@ -41,7 +41,7 @@ caption {
 td {
     text-align: center;
     padding: 8px;
-    border: 2px solid darkolivegreen;
+    border: 2px solid #051728;
 }
 
 #check {
@@ -63,7 +63,7 @@ button {
     height: 35px;
     width: 100%;
     border-width: 4px;
-    border-color: darkgreen;
+    border-color: #0e0362;
 }
 
 input[type="checkbox"] {

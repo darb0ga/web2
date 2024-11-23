@@ -64,12 +64,11 @@ function pointDot(canvas, ctx, itHit, x, y, r) {
         return;
     }
 
-    const scale = 150; // совпадает с drawGraph
-    const k = scale / r; // масштаб
+    const scale = 150;
+    const k = scale / r;
 
     ctx.beginPath();
-    ctx.arc(x * k, y * k, 4, 0, Math.PI * 2); // x и y уже в новых координатах
-    ctx.fillStyle = itHit ? "rgb(35,241,12)" : "rgb(241,35,35)"; // цвет для попаданий и промахов
+    ctx.arc(x * k, y * k, 4, 0, Math.PI * 2);
     ctx.fill();
 }
 
@@ -83,7 +82,7 @@ function drawGraph(R) {
     ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.scale(1, -1);
 
-    ctx.fillStyle = "rgb(218,21,88)";
+    ctx.fillStyle = "rgb(62,224,89)";
     ctx.beginPath();
 
     // Top left triangle
@@ -111,7 +110,7 @@ function drawGraph(R) {
     ctx.lineTo(0, canvas.height / 2);
     ctx.stroke();
 
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "black";
 
     var table = document.querySelector('#res')
     var rows = table.querySelectorAll('tr')
@@ -127,7 +126,7 @@ function drawGraph(R) {
 
     ctx.scale(1, -1);
     ctx.fillStyle = "black";
-    ctx.font = "12px monospace";
+    ctx.font = "14px monospace";
 
     if (R == 0) {
         ctx.fillText("R", scale, -6);

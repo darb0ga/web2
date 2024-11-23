@@ -34,8 +34,6 @@ function onSubmit(ev) {
         return;
     }
 
-    //this.submit(ev);
-
 }
 
 function checkBox(selectedCheckbox){
