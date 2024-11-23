@@ -3,10 +3,9 @@ window.addEventListener('load', drawGraph(0));
 
 function canvas() {
     const canvas = document.getElementById("graph");
-    const ctx = canvas.getContext("2d");
 
     let mainForm = document.getElementById('table');
-    //валидация данных
+
     const rect = canvas.getBoundingClientRect();
 
     const xDom = event.clientX - rect.left - canvas.width / 2;
@@ -29,7 +28,7 @@ function canvas() {
 
         yBoxes.forEach(checkbox => {
             if (checkbox.id !== "optional") {
-                checkbox.checked = false; // Снимаем отметку у остальных
+                checkbox.checked = false;
             } else {
                 checkbox.checked = true;
                 checkbox.value = y;
@@ -128,7 +127,7 @@ function drawGraph(R) {
     ctx.fillStyle = "black";
     ctx.font = "14px monospace";
 
-    if (R == 0) {
+    if (R === 0) {
         ctx.fillText("R", scale, -6);
         ctx.fillText("R/2", scale / 2, -6);
         ctx.fillText("-R/2", -scale / 2, -6);

@@ -21,7 +21,7 @@ function IncorrectInputException(message) {
     this.name = "IncorrectInputException";
 }
 
-function onSubmit(ev) {
+function onSubmit() {
     let mainForm = document.getElementById('table');
 
     try {
@@ -31,7 +31,6 @@ function onSubmit(ev) {
         mainForm.submit();
     } catch (e) {
         alert(e.message);
-        return;
     }
 
 }

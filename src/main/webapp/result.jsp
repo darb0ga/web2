@@ -30,7 +30,6 @@
                 <tbody>
                 <%  ServletContext context = getServletContext();
 
-                    // Извлекаем список из контекста приложения
                     Point dot = (Point) context.getAttribute("point");
 
 

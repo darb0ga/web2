@@ -113,7 +113,6 @@
             </tr>
             <%  ServletContext context = getServletContext();
 
-                // Извлекаем список из контекста приложения
                 List<Point> results = (List<Point>) context.getAttribute("results");
 
                 if (results != null) {

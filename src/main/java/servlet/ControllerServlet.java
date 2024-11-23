@@ -1,18 +1,13 @@
 package servlet;
 
 import jakarta.servlet.ServletConfig;
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import utils.Point;
 
 import java.io.IOException;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet("/controller-servlet")
 public class ControllerServlet extends HttpServlet {
@@ -26,7 +21,6 @@ public class ControllerServlet extends HttpServlet {
     }
 
     protected void handleRequest(HttpServletRequest request, HttpServletResponse response) {
-        ServletContext context = getServletContext();
 
         var x = request.getParameter("x");
         var y = request.getParameter("y");
@@ -40,7 +34,6 @@ public class ControllerServlet extends HttpServlet {
             }
 
         } catch (IOException | ServletException e) {
-            //e.getMessage();
             e.printStackTrace();
         }
     }

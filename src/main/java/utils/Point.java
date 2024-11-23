@@ -1,21 +1,18 @@
 package utils;
 
 import java.io.Serializable;
-import java.time.LocalTime;
 
 public class Point implements Serializable{
-    private float x;
-    private float y;
-    private float r;
+    private final float x;
+    private final float y;
+    private final float r;
 
     private boolean isIn;
-    private LocalTime time;
 
     public Point(float x, float y, float r){
         this.x = x;
         this.y = y;
         this.r = r;
-        this.time = LocalTime.now();
     }
 
     public float getX(){
@@ -41,7 +38,4 @@ public class Point implements Serializable{
         isIn = in;
     }
 
-    public LocalTime getTime(){
-        return this.time;
-    }
 }
