@@ -28,13 +28,9 @@ public class ControllerServlet extends HttpServlet {
     protected void handleRequest(HttpServletRequest request, HttpServletResponse response) {
         ServletContext context = getServletContext();
 
-
-        LocalTime start = LocalTime.now();
-
         var x = request.getParameter("x");
         var y = request.getParameter("y");
         var r = request.getParameter("r");
-        context.setAttribute("time", start);
 
         try {
             if (x != null && y != null && r != null) {

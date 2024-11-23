@@ -9,9 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import utils.Point;
 
 import java.io.IOException;
-import java.time.Duration;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +22,7 @@ public class AreaCheckServlet extends HttpServlet {
 
     protected void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext context = getServletContext();
-
+        Object table = context.getAttribute("results");
 
         var x = Float.parseFloat(request.getParameter("x"));
         var y = Float.parseFloat(request.getParameter("y"));
@@ -37,6 +34,9 @@ public class AreaCheckServlet extends HttpServlet {
         dot.setIn(isHit);
 
         results.add(dot);
+        if(table != null){
+            results.addAll((List<Point>) table);
+        }
         context.setAttribute("point", dot);
         context.setAttribute("results", results);
 
@@ -58,7 +58,7 @@ public class AreaCheckServlet extends HttpServlet {
             }
         }
         if (x < 0 && y < 0) {
-            return !(x > -r) && !(y < -r);
+            return (x >= -r) && (y >= -r);
         }
         return true;
     }

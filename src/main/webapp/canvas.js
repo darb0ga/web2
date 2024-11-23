@@ -1,12 +1,12 @@
 window.addEventListener('load', drawGraph(0));
 
+
 function canvas() {
     const canvas = document.getElementById("graph");
     const ctx = canvas.getContext("2d");
 
     let mainForm = document.getElementById('table');
     //валидация данных
-
     const rect = canvas.getBoundingClientRect();
 
     const xDom = event.clientX - rect.left - canvas.width / 2;
@@ -16,6 +16,7 @@ function canvas() {
         const rs = Array.from(
             document.getElementsByName("r")).filter(e => e.checked
         );
+
         if (rs.length !== 1) {
             throw new Error("choose one value of r");
         }
@@ -24,9 +25,24 @@ function canvas() {
         const x = Math.round(xDom * (r / (canvas.width / 4))) / 100;
         const y = Math.round(yDom * (r / (canvas.height / 4))) / 100;
 
+        const yBoxes = document.getElementsByName("y");
+
+        yBoxes.forEach(checkbox => {
+            if (checkbox.id !== "optional") {
+                checkbox.checked = false; // Снимаем отметку у остальных
+            } else {
+                checkbox.checked = true;
+                checkbox.value = y;
+            }
+        });
+
         console.log("x: " + x + ", y: " + y + ", r: " + r / 100);
 
-        mainForm.submit();
+        mainForm["x"].value = x;
+        mainForm["y"].value = y;
+        mainForm["r"].value = r;
+
+        onSubmit(this);
     } catch (e) {
         alert(e);
     }
@@ -35,34 +51,30 @@ function canvas() {
 
 function isItHit(x, y, r) {
     x = parseFloat(x);
+    y = parseFloat(y);
+    r = parseFloat(r);
     return ((x <= 0) && (x >= -r) && (y <= 0) && (y >= -r) || //in rectangle
         (x <= 0) && (y <= x + (r / 2)) && (y >= 0) || //in triangle
         (x * x + y * y <= r * r) && (x >= 0) && (y >= 0) //in circle
     );
 }
 
-function pointDot(ctx, itHit, x, y, r) {
-    if (!r || !x) {
+function pointDot(canvas, ctx, itHit, x, y, r) {
+    if (!r || x === undefined || y === undefined) {
         return;
     }
 
-    let SCALE_FACTOR = 125 / r;
+    const scale = 150; // совпадает с drawGraph
+    const k = scale / r; // масштаб
+
     ctx.beginPath();
-    ctx.arc(x * SCALE_FACTOR, y * SCALE_FACTOR, 5, 0, Math.PI * 2);
-    if (isHit) {
-        if (isHit.toString().toUpperCase() === 'YES' || isHit === true) {
-            ctx.fillStyle = "rgb(255,51,116)";
-        } else if (isHit.toString().toUpperCase() === 'NO' || isHit === false) {
-            ctx.fillStyle = "rgb(3,27,98)";
-        }
-    }
+    ctx.arc(x * k, y * k, 4, 0, Math.PI * 2); // x и y уже в новых координатах
+    ctx.fillStyle = itHit ? "rgb(35,241,12)" : "rgb(241,35,35)"; // цвет для попаданий и промахов
     ctx.fill();
-
-
 }
 
 function drawGraph(R) {
-    const scale = 150
+    const scale = 150;
     const canvas = document.getElementById("graph");
     const ctx = canvas.getContext("2d");
 
@@ -71,7 +83,7 @@ function drawGraph(R) {
     ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.scale(1, -1);
 
-    ctx.fillStyle = "rgb(5,23,40)";
+    ctx.fillStyle = "rgb(218,21,88)";
     ctx.beginPath();
 
     // Top left triangle
@@ -107,24 +119,38 @@ function drawGraph(R) {
 
     if (rows[1] !== undefined) {
         for (var i = 1; i < rows.length; i++) {
-            pointDot(ctx, isItHit(rows[i].cells[1].innerHTML, rows[i].cells[2].innerHTML, R),
-                rows[i].cells[1].innerHTML, rows[i].cells[2].innerHTML, R);
+            pointDot(canvas, ctx, isItHit(rows[i].cells[1].innerHTML.trim(), rows[i].cells[2].innerHTML.trim(), R),
+                rows[i].cells[0].innerHTML.trim(), rows[i].cells[1].innerHTML.trim(), R);
         }
     }
 
+
     ctx.scale(1, -1);
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "black";
     ctx.font = "12px monospace";
-    ctx.fillText("R", scale, -6);
-    ctx.fillText("R/2", scale / 2, -6);
-    ctx.fillText("-R/2", -scale / 2, -6);
-    ctx.fillText("-R", -scale, -6);
 
-    ctx.fillText("R", 6, -scale);
-    ctx.fillText("R/2", 6, -scale / 2);
-    ctx.fillText("-R/2", 6, scale / 2);
-    ctx.fillText("-R", 6, scale);
+    if (R == 0) {
+        ctx.fillText("R", scale, -6);
+        ctx.fillText("R/2", scale / 2, -6);
+        ctx.fillText("-R/2", -scale / 2, -6);
+        ctx.fillText("-R", -scale, -6);
 
+        ctx.fillText("R", 6, -scale);
+        ctx.fillText("R/2", 6, -scale / 2);
+        ctx.fillText("-R/2", 6, scale / 2);
+        ctx.fillText("-R", 6, scale);
+    } else {
+        ctx.fillText((R).toString(), scale, -6);
+        ctx.fillText((R / 2).toString(), scale / 2, -6);
+        ctx.fillText((-R / 2).toString(), -scale / 2, -6);
+        ctx.fillText((-R).toString(), -scale, -6);
+
+        ctx.fillText((R).toString(), 6, -scale);
+        ctx.fillText((R / 2).toString(), 6, -scale / 2);
+        ctx.fillText((-R / 2).toString(), 6, scale / 2);
+        ctx.fillText((-R).toString(), 6, scale);
+    }
     ctx.translate(-canvas.width / 2, -canvas.height / 2);
     return null;
+
 }

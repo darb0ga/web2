@@ -1,8 +1,4 @@
 <%@ page import="java.util.List" %>
-<%@ page import="java.time.temporal.ChronoUnit" %>
-<%@ page import="java.time.temporal.Temporal" %>
-<%@ page import="java.time.LocalTime" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="utils.Point" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
@@ -43,33 +39,35 @@
                     <td>
                         <label>Выберите Y:</label>
                         <div class="group">
-                            <input name="y" id="-4" class="checkbox" type="checkbox"
+                            <input name="y" id="-4" class="checkbox" type="checkbox" onclick="yChecking(this);"
                                    value="-4"/>
                             <label name="y" for="-4">-4</label>
-                            <input name="y" id="-3" class="checkbox" type="checkbox"
+                            <input name="y" id="-3" class="checkbox" type="checkbox" onclick="yChecking(this);"
                                    value="-3"/>
                             <label name="y" for="-3">-3</label>
-                            <input name="y" id="-2" class="checkbox" type="checkbox"
+                            <input name="y" id="-2" class="checkbox" type="checkbox" onclick="yChecking(this);"
                                    value="-2"/>
                             <label name="y" for="-2">-2</label>
-                            <input name="y" id="-1" class="checkbox" type="checkbox"
+                            <input name="y" id="-1" class="checkbox" type="checkbox" onclick="yChecking(this);"
                                    value="-1"/>
                             <label name="y" for="-1">-1</label>
-                            <input name="y" id="0" class="checkbox" type="checkbox"
+                            <input name="y" id="0" class="checkbox" type="checkbox" onclick="yChecking(this);"
                                    value="0"/>
                             <label name="y" for="0">0</label>
-                            <input name="y" id="1" class="checkbox" type="checkbox"
+                            <input name="y" id="1" class="checkbox" type="checkbox" onclick="yChecking(this);"
                                    value="1"/>
                             <label name="y" for="1">1</label>
-                            <input name="y" id="2" class="checkbox" type="checkbox"
+                            <input name="y" id="2" class="checkbox" type="checkbox" onclick="yChecking(this);"
                                    value="2"/>
                             <label name="y" for="2">2</label>
-                            <input name="y" id="3" class="checkbox" type="checkbox"
+                            <input name="y" id="3" class="checkbox" type="checkbox" onclick="yChecking(this);"
                                    value="3"/>
                             <label name="y" for="3">3</label>
-                            <input name="y" id="4" class="checkbox" type="checkbox"
+                            <input name="y" id="4" class="checkbox" type="checkbox" onclick="yChecking(this);"
                                    value="4"/>
                             <label name="y" for="4">4</label>
+                            <input name="y" id="optional"  onclick="return false" class="checkbox" type="checkbox"/>
+                            <label name="y">optional</label>
                         </div>
                     </td>
                 </tr>
@@ -78,19 +76,19 @@
                         <label>Выберите R:</label>
                         <p>
                         <div class="group">
-                            <input name="r" id="r1" class="checkbox" type="checkbox" onchange="drawGraph(1);"
+                            <input name="r" id="r1" class="checkbox" type="checkbox" onclick="checkBox(this);" onchange="drawGraph(1);"
                                    value="1"/>
                             <label name="r" for="r1">1</label>
-                            <input name="r" id="r1.5" class="checkbox" type="checkbox" onchange="drawGraph(1.5);"
+                            <input name="r" id="r1.5" class="checkbox" type="checkbox" onclick="checkBox(this);" onchange="drawGraph(1.5);"
                                    value="1.5"/>
-                            <label name="r"for="r1.5">1.5</label>
-                            <input name="r" id="r2" class="checkbox" type="checkbox" onchange="drawGraph(2);"
+                            <label name="r" for="r1.5">1.5</label>
+                            <input name="r" id="r2" class="checkbox" type="checkbox" onclick="checkBox(this);" onchange="drawGraph(2);"
                                    value="2"/>
                             <label name="r" for="r2">2</label>
-                            <input name="r" id="r2.5" class="checkbox" type="checkbox" onchange="drawGraph(2.5);"
+                            <input name="r" id="r2.5" class="checkbox" type="checkbox" onclick="checkBox(this);" onchange="drawGraph(2.5);"
                                    value="2.5"/>
                             <label name="r" for="r2.5">2.5</label>
-                            <input name="r" id="r3" class="checkbox" type="checkbox" onchange="drawGraph(3);"
+                            <input name="r" id="r3" class="checkbox" type="checkbox" onclick="checkBox(this);" onchange="drawGraph(3);"
                                    value="3"/>
                             <label name="r" for="r3">3</label>
                         </div>
@@ -112,10 +110,8 @@
                 <th>X</th>
                 <th>Y</th>
                 <th>R</th>
-                <th>execution time</th>
                 <th>result</th>
             </tr>
-            <tbody>
             <%  ServletContext context = getServletContext();
 
                 // Извлекаем список из контекста приложения
@@ -130,10 +126,7 @@
                 </td>
                 <td><%=results.get(index).getY()%>
                 </td>
-                <td><%=results.get(index).getR()%>
-                </td>
-                <td><%=ChronoUnit.MICROS.between((Temporal) context.getAttribute("time"), LocalTime.now())%>
-                </td>
+                <td><%=results.get(index).getR()%></td>
                 <td><%=results.get(index).getIn()%>
                 </td>
             </tr>
@@ -141,7 +134,6 @@
                     }
                 }
             %>
-            </tbody>
         </table>
     </td>
 </table>

@@ -1,7 +1,4 @@
 <%@ page import="utils.Point" %>
-<%@ page import="java.time.temporal.ChronoUnit" %>
-<%@ page import="java.time.LocalTime" %>
-<%@ page import="java.time.temporal.Temporal" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 
@@ -27,7 +24,6 @@
                     <th>X</th>
                     <th>Y</th>
                     <th>R</th>
-                    <th>execution time(microsecond)</th>
                     <th>result</th>
                 </tr>
                 </thead>
@@ -46,8 +42,6 @@
                     <td><%=dot.getY()%>
                     </td>
                     <td><%=dot.getR()%>
-                    </td>
-                    <td><%=ChronoUnit.MICROS.between((Temporal) context.getAttribute("time"), LocalTime.now())%>
                     </td>
                     <td><%=dot.getIn()%>
                     </td>
