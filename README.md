@@ -1,2 +1,3 @@
-# web
-This is a repository for web labs
+# WEB LAB 2
+## This is a repository for my secound lab
+
